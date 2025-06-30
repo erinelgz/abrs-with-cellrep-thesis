@@ -1,0 +1,28 @@
+\subsection{Reproducibility}
+
+In this mandatory section, describe the procedures to setup the environment for
+evaluating or reusing your artifact(s).
+%
+The descriptions should be targeted at being accessible to novice users.
+
+\paraib{Accessing the artifact(s)}
+%
+All our components are open-source, and publicly available on github (Puffer, Mahimahi, and CellReplay). The ABR algorithms that we used are also included in Puffer's repository. They can be found in "abr" directory, and models like Pensieve, Gelato, and TTP can be accessed in "third\_party" directory. Users can clone each project repository, and apply the patches described in abstract, and set up each component by following their documentations.
+
+\paraib{Experiment Workflow}
+%
+We mentioned about user workflow to conduct experiments in overview in Section 3. We run Puffer's servers, and in another terminal start a Mahimahi or CellReplay shell, and inside the emulated namespace, we initialize a headless browser to start a streaming session, just like how Puffer developers set up their environment. We also use tcpdump to capture packets in port 50001, which is the default port where Puffer sends video segments from media server to web client.
+
+\paraib{Evaluation and Expected Result}
+%
+When comparing emulators, we did expect CellReplay to perform better due to its advanced design compared to Mahimahi. We indeed observed the RTT and delivery rate changes between both emulators, but we were also expecting SSIM and rebuffer time rankings to also shift slightly. Instead, they remained constant, with only slight deviations of both metric values. When we processed graphs for SSIM index and rebuffer time, Mahimahi and CellReplay's patterns on each ABR were almost identical when same traces were used.
+
+\paraib{Experiment Customization}
+%
+For our ABR configurations, we used \texttt{cubic} congestion control algorithm, which is default in Ubuntu, but if desired, users can also use \texttt{bbr}, by modifyin settings.yml file. Also, we used recommended configuration for each ABR, but for custom experiments, these configurations can be modified.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:

@@ -1,0 +1,55 @@
+\section{Overview}\label{s:overview}
+
+In this section, we provide a high-level overview of our ABR evaluation framework, focusing on system goals, user-level experience, and interaction between system components. In the latter, the implementation and design choices are explained in Section~\ref{s:design}.
+
+Evaluating ABR algorithms in a fair and realistic manner is a challenge due to diverse network conditions, trace formats, and testbed precision. We aim to address these challenges by creating a reproducible and automated testing environment that allows direct comparison of ABR algorithms as fair as possible, under the same conditions. Puffer's realistic streaming logic inside a real browser and detailed collection of metrics elevate the accuracy of the testing environment.
+
+\parai{System Goals:}
+
+\begin{itemize}
+    \item \textbf{Goal 1:} Evaluating the behavior of different ABR algorithms under multiple network conditions.
+    \item \textbf{Goal 2:} Analyze application-layer metrics along with transport-layer metrics to observe how each algorithm performs under identical conditions.
+    \item \textbf{Goal 3:} Compare ABR performance and rankings using different emulators (Mahimahi and CellReplay).
+\end{itemize}
+
+To achieve these goals, it is necessary to build a realistic, controlled, and repeatable setup to reflect the actual playback behavior and ensure a fair comparison.
+
+\parai{User Workflow:}
+
+\begin{itemize}
+    \item Select an ABR algorithm supported by Puffer and configure its settings.
+    \item Choosing a trace file to replay network conditions (4G or 5G across multiple providers and different signal strengths).
+    \item Starting an isolated emulator shell (Mahimahi or CellReplay) that allows the replay of the desired trace.
+\end{itemize}
+
+After configuring these settings in the test environment, a single shell command executes a script and launches an automated test run. This includes starting a headless browser session that connects to Puffer's web servers, logs in with specified user and password, navigates to "player" page, and starts streaming under the emulated environment. The script runs a 10-minute playback session, which is as long as the duration of each pre-recorded video. During playback, Puffer logs performance metrics that are used in later analysis.
+
+\parai{System Architecture:}
+\begin{itemize}
+    \item \textbf{Emulation shell:} Recorded network traces are replayed by Mahimahi or CellReplay, inside an isolated namespace.
+    \item \textbf{Browser automation:} A Puppeteer script runs a headless Chrome instance that plays video as a real user would, on a real client.
+    \item \textbf{Puffer servers:} Sends video segments from the media server to the web server as chunks with ABR logic while logging application-level metrics.
+    \item \textbf{Transport-layer metrics:} Using tcpdump captures, we capture all network packets that are sent, received, or retransmitted during playback. These packets are saved in a PCAP file, to be used in analysis.
+    \item \textbf{Analysis tools:} Python scripts process CSV and PCAP files that include metrics from both the application layer and the transport layer, and output them as visualizations, rankings, and summaries.
+\end{itemize}
+
+\parai{Trace Collection:}
+We use real-world network traces in our experiments.
+\begin{itemize}
+    \item \textbf{Mahimahi 4G traces:} Mahimahi includes AT\&T, T-Mobile and Verizon LTE profiles in its repository, ready to use.
+    \item \textbf{CellReplay 5G traces:} High-resolution recordings from modern 5G networks are included in the CellReplay repository. There are three different T-Mobile and Verizon traces with different signal strengths.
+\end{itemize}
+To isolate emulator differences, we also run CellReplay's 5G traces inside Mahimahi, to compare if any performance and ranking differ for each ABR algorithm.
+
+\parai{Output and Results:}
+\begin{itemize}
+    \item Application-layer metrics: SSIM, buffer occupancy, and rebuffering time.
+    \item Transport-layer metrics: RTT, TCP retransmissions and delivery rate.
+\end{itemize}
+These metrics are processed from raw logs and packet traces to generate plots and tables, which are later used for detailed evaluation in Section~\ref{s:evaluation}.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:

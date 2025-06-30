@@ -1,0 +1,48 @@
+\section{Background}\label{s:background}
+
+In this section, we provide the background information necessary to motivate and understand the rest of the thesis. We will explain what ABR streaming is and the different types of algorithms used in our experiments. In the latter, we will describe the tools used to create a fair testbed for each algorithm: Puffer, Mahimahi, and CellReplay. Lastly, we will discuss the limitations of existing evaluation methods.
+
+\textbf{Adaptive Bitrate (ABR) Streaming.}  Modern video streaming platforms deliver content in chunks, typically between 2 to 4 seconds long, and encode each segment in multiple bitrates. ABR algorithms are responsible for choosing the bitrate to fetch for the next segment based on real-time feedback from the network. The goal of these algorithms is to avoid rebuffering and maintain smooth playback, while providing the highest quality possible.
+
+ABR algorithms are necessary because real-life networks have high dynamic bandwidth, signal strength, and delays, especially in mobile networks. Fixed-bitrate streaming cannot handle these changes, which usually results in stalling and drops. However, other adaptive methods may cause constant switching between qualities to avoid stalling. ABR algorithms try to balance both these features in order to provide smooth playback and highest possible quality, although some algorithms may sacrifice one of these in weaker network settings.
+
+\textbf{Types of ABR Algorithms.} ABR algorithms generally fall into three broad classes:
+\begin{itemize}
+    \item \textbf{Throughput-based} algorithms (such as Linear BBA) estimate the available bandwidth using past download rates and select the best quality that fits the estimated bandwidth.
+    \item \textbf{Buffer-based} algorithms (such as BOLA~\cite{bola-bola}) make decisions using current buffer levels. They aim to keep the buffer in a safe range to avoid stalling or unnecessary overbuffering.
+    \item \textbf{Learning-based or model-predictive} methods (for example, Pensieve~\cite{pensieve-sigcomm}, MPC~\cite{mpc}) use machine learning or optimization-based models to predict future network conditions and select the next bitrate based on a reward function or optimization goal.
+\end{itemize}
+
+Each approach has its own advantages and disadvantages. Throughput-based methods react faster but may be unstable, whereas buffer-based methods are more stable but can be too conservative. Learning-based methods often perform better in controlled tests but require careful tuning and training, making them improvable.
+
+\textbf{Evaluation Metrics.} In this thesis, we evaluate the performance of ABR algorithms using a few metrics.
+
+\begin{itemize}
+    \item \textbf{SSIM (Structural Similarity Index):} This metric is used to evaluate video quality. It compares the visual similarity between the streamed and original video content. It is measured in a range between 0 and 1, and a higher value means better video quality.
+
+    \item \textbf{Buffer Time:} Throughout the thesis we also refer to it as buffer occupancy, and this metric shows how much video is stored in seconds in the playback buffer on average. A higher value means that more preloaded content is available and prevents rebuffering.
+
+    \item \textbf{Rebuffer Time.} We often refer to this metric as "stalling" or "smoothness". It displays the total time the video player waits for data to arrive. Lower rebuffer time means fewer interruptions during video playback. 
+
+    \item \textbf{RTT (Round-Trip Time):} RTT is the average delay in milliseconds. It measures how long it takes for a signal to reach the server and come back. Higher RTT means that the feedback is delayed, and ABR algorithms decisions are slowed down causing delayed responses.
+
+    \item \textbf{Delivery Rate:} This metric measures the rate at which the video data is delivered, measured in bytes per second. It displays how well algorithms make use of the available network bandwidth.
+\end{itemize}
+
+
+\textbf{Challenges in ABR Evaluation.} Its difficult to evaluate ABR algorithms in a fair and realistic way. Some studies often rely on offline simulators that run locally and do not use real traffic. These setups usually mimic delay and throughput artificially, but do not fully capture Transport-level or Application-level behavior. Real-world evaluation with live playback is preferred for more precise results, but its often hard to set up and control. 
+
+Even when real traces are used to conduct experiments, the emulation tool can create diversity between results. If the emulator cannot replicate bursty throughput with variable delays, the results may not reflect realistic performance. Furthermore, metrics like SSIM and rebuffering are often sensitive to how realistic the playback conditions are and require consistent logging.
+
+\textbf{Puffer Streaming Platform.} Puffer~\cite{puffer} is an open source research platform from Stanford University that streams live over-the-air TV content to real web clients and includes multiple ABR algorithms, including learning-based models. It logs application-level metrics like SSIM, buffer, rebuffering events, RTT, and delivery rate, also exposing the internal playback state. Unlike synthetic simulators, Puffer operates over real TCP connections and renders actual pre-recorded video. Puffer's media servers send the data through chunks to the web server to allow video playback, making it a realistic environment to evaluate the behavior of ABR algorithms.
+
+\textbf{Mahimahi.} Mahimahi~\cite{mahimahi} is a well-known network emulator that creates an isolated environment inside a shell where the network traffic is shaped based on recorded traces. It supports a fixed delay and replay of recorded traces. It is widely used in many researches because of its simple interface and reproducibility by replaying the same trace deterministically for each test run. In our setup, we use Mahimahi with its own 4G traces from AT\&T, T-Mobile, and Verizon, as well as 5G traces from CellReplay.
+
+\textbf{CellReplay.} CellReplay~\cite{cellreplay-nsdi25} is a more advanced version of Mahimahi that builds on it and is designed to provide a more accurate and realistic behavior of cellular networks like 5G. It allows for more accurate emulation of bandwidth and RTT changes with higher time granularity. CellReplay also includes support for high-resolution traces that update more frequently, making it more suitable for evaluating ABR algorithms that make decisions every few seconds.
+
+\textbf{Emulator fidelity} matters since the accuracy of the evaluations depends heavily on the emulator's ability to simulate the behavior of real-life networks. Mahimahi is deterministic and easy to use, but runs on 1-second time steps and may miss small but important variations in network conditions. Therefore, CellReplay addresses this gap by introducing higher time precision and more detailed emulation with more complex trace-formatting requirements. By running the same trace on both emulators, we can compare their impact on ABR behavior. This is one of the key experiments in our thesis and shows how different emulator designs can lead to different results even when the same trace is used.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:

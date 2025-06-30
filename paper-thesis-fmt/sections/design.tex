@@ -1,0 +1,44 @@
+\section{Design}\label{s:design}
+
+This section explains in detail our design choices for the ABR evaluation system. We elaborate on how automation is handled, how we conduct experiments, and how the data are analyzed.
+
+\subsection{Playback Automation}
+Playback is automated by Puppeteer, a framework for Node.js, which offers an automated headless browser setup. We chose this method that Puffer provides, which is sending video segments as chunks from server to client, rather than modifying its logic to capture video segments directly from the media servers, to ensure a realistic client-server model. We also reduce human errors with this automated script by eliminating one-by-one command-line interactions for each step. We also used a timer of 10 minutes for each test run, simply to avoid looping of pre-recorded videos. Each video is 10 minutes long, and when the playback is done, the connection reopens, starting another session. This also further automates the test runs and reduces human error, maintaining a smooth playback of precisely 10 minutes, and closing the connection afterwards to ensure that each algorithm is tested for the same amount of time. For simplicity, we did not remove the login page logic, which is necessary to start a streaming session, but instead included the login process inside the script by specifying username and password. This design choice guarantees a setup with a fair testing environment and is less prone to human errors.
+
+\subsection{ABR Configuration in Puffer:}
+Each ABR algorithm requires configuration and setup via Puffer's internal settings file. When the file is modified to change the ABR algorithm choice, we restart the media server before every run to reset state and make sure that there is no carry-over between experiments. We repeat the same configuration settings for each ABR algorithm, without modifying them in different test runs to ensure fairness and more accurate results.
+
+\subsection{Emulator Setup and Integration.}
+
+We initially chose Mahimahi because of its popularity among academic ABR research. Mahimahi supports reproducibility and integrates easily with Puffer. Its deterministic trace replay model helps in creating a controlled test environment. However, Mahimahi has some limitations like updating bandwidth and delay every 1 second, where it is too much in our time sensitive setup, and has a fixed delay feature that lacks realistic behavior.
+
+To address this, we complement Mahimahi by using CellReplay, which avoids those limitations by offering a more advanced emulation, introducing faster bandwidth and delay updates with more realistic 5G conditions. It is more suitable for ABR testing, due to its ability to capture more detailed variations in ABR decisions and provides more accurate results. By comparing both, we also evaluate how the complexity of emulator affects ABR performance.
+
+\begin{itemize}
+    \item \textbf{Mahimahi:} Runs the trace through \texttt{mm-link}, shaping up/down bandwidth and applying symmetric delay.
+    \item \textbf{CellReplay:} Runs traces through \texttt{mm-cell}, providing quicker updates for bandwidth and delay. Offers realistic 5G modeling and supports asymmetric paths. Also introduces base delays and latency offsets.
+\end{itemize}
+
+\subsection{Packet Capture and Transport Metrics.}
+Transport-level behavior is monitored using \texttt{tcpdump}. We apply port filters to isolate streaming flows and use \texttt{tshark} to extract:
+\begin{itemize}
+    \item Percentage of retransmitted packets (ratio of retransmissions to total packets).
+    \item Timestamp of retransmissions when they occur (distribution of time between 2 succesive retransmissions).
+\end{itemize}
+
+We use tshark in Python scripts to process and analyze TCP captures, as well as to plot visualizations.
+
+\subsection{Analysis and Visualization.}
+All plots, tables, and rankings shown in Section 6 are generated through a unified analysis pipeline. Using Python libraries like Matplotlib and Pandas to generate our visualizations. The following visualizations are included:
+
+\begin{itemize}
+    \item Tables for all experiments, summarizing the overall results and ranking each ABR algorithm based on several factors, such as SSIM and Rebuffer.
+    \item Graphical plots that visualize mean SSIM over mean rebuffer time.
+    \item Detailed RTT over time graphs that display how trace variability and emulator choice affect ABR behavior.
+    \item Bar charts for average buffer time, showing how rankings change depending on the emulator choice.
+\end{itemize}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:

@@ -1,0 +1,26 @@
+\section{Introduction}\label{s:intro}
+
+Streaming video now accounts for the majority of consumer internet traffic, and ABR algorithms play a key role in ensuring smooth playback under changing network conditions. These algorithms continuously make decisions about the video quality level to fetch, trying to balance playback quality, buffering, and smoothness. The goal is to adapt in real time to bandwidth fluctuations to avoid drops and rebuffering in order to provide the best user experience.
+
+ABR algorithms are used on global streaming platforms such as YouTube, Netflix, and Twitch. Comparing and evaluating them to choose the most fitting algorithm remains a challenge. Most evaluations rely on simulation-based environments in limited testbeds. Some issues arise due to this limitation: (1) ABR performance can vary significantly in different test setups and traces, (2) rankings or results from a single setup may not generalize well to others, and (3) many evaluations do not involve realistic streaming environments or setups to mimic live traffic.
+
+In this thesis, we evaluate six existing and well-known ABR algorithms using the Puffer live streaming platform~\cite{puffer}. Puffer is an open-source system developed at Stanford that supports real video playback with built-in ABR modules and a logging mechanism. Puffer allows ABRs to be tested in a real streaming environment over TCP with pre-recorded video content, instead of relying on simulated downloads, which makes it an excellent platform for academic research.
+
+To run our experiments, we set up a controlled test environment using two emulators: Mahimahi~\cite{mahimahi} and CellReplay~\cite{cellreplay-nsdi25}. Mahimahi is commonly used in academia and replays real 4G traces from different providers. CellReplay is an improved version of Mahimahi, offering higher-fidelity emulation of 5G traces, including more accurate modeling of wireless conditions and better control over link behavior. We integrate both emulators into a headless testing pipeline to automate and run ABR sessions in a browser using real network traces.
+
+For automation, we used Puppeteer to launch headless Chrome sessions, log into Puffer's web server, and navigate the media player to start video playback. While playback is running, Puffer collects various metrics such as SSIM (video quality), buffer occupancy, rebuffering time, delivery rate, and RTT, and logs these metrics into its database. We exported these logs as CSV files to process and visualize the data for analysis. At the same time, we use \texttt{tcpdump} to capture all network traffic and process it using \texttt{tshark} and Python scripts to extract TCP-level statistics like retransmissions and packet delivery for further analysis.
+
+The main goal of this thesis can be formulated into this question; "To what extent does the choice of emulator and network trace variability influence the performance, behavior, and rankings of ABR algorithms?". To answer this, we compare ABR performance under the same 5G traces replayed in both emulators to isolate how emulation affects performance, and we also replay 4G traces to compare performance across high- and low-bandwidth network conditions. Lastly, we compare our work to previous ones using CellReplay to further evaluate the consistency of our results.
+
+\textbf{Contributions:}
+\begin{itemize}
+    \item \textbf{A reproducible ABR evaluation testbed.} We develop an automated, trace-driven evaluation environment using Puffer, Mahimahi and CellReplay, enabling repeatable and fair ABR testing under real network traces.
+    \item \textbf{Cross-emulator comparison.} We evaluate how ABR performance rankings change between two emulators and identify differences when using the same traces in Mahimahi and CellReplay.
+    \item \textbf{Dual-layer metric analysis.} We analyze both application-level metrics and transport-level metrics, to complete the evaluation of ABR behavior.
+    \item \textbf{Ranking stability and reproducibility.} We compare our rankings with previous work to investigate how consistent the results are when using CellReplay, and to highlight any deviations.
+\end{itemize}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:

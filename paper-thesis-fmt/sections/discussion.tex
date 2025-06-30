@@ -1,0 +1,44 @@
+\section{Discussion}\label{s:discussion}
+
+Results from evaluation show how each ABR algorithm behaves under different environments, but in real-world usage, it is necessary to understand what these results mean beyond their numerical interpretations. In this section, we reflect on our findings and how they apply to real-world deployment cases, what limitations they raise, and what future work should consider.
+
+\subsection*{ABR Trade-offs and Real World Usage}
+
+All algorithms have their own strategies, which lead to different advantages and disadvantages depending on varying network conditions. For example, Gelato is ideal for platforms that aim to maximize video quality, even if it means occasional stalling. It consistently performed as the overall best ABR algorithm that gave the highest SSIM scores, especially in 5G scenarios. On the other hand, Gelato has a weaker rebuffering performance in some conditions, which makes it more suitable for platforms that stream movies, where users may tolerate occasional pauses.
+
+Pensieve performed better in terms of rebuffering on lower bandwidth 4G networks, but sacrificed some quality. On the other hand, in higher bandwidth networks like 5G, it stalls more than other ABRs. This could be a sign that Pensieve overshoots or cannot react well to faster link changes, making it less ideal for modern mobile networks unless it is tuned appropriately.
+
+TTP and Linear BBA offer a safer middle ground compared to others. These ABR algorithms offer a stable and more predictable behavior in 5G networks. Their balance makes them more reliable for general use across varying networks. Platforms that want a consistent user experience would benefit more by choosing these ABR algorithms. We can say the same for MPC in higher bandwidth networks, but in 4G scenarios, it stalls twice as much compared to TTP and Linear BBA.
+
+Lastly, BOLA ranked at the bottom in playback quality in most of the network conditions, but managed to deliver a smoother playback except for 4G traces. This makes BOLA a good option for use cases where users would prefer a smooth playback over quality, where every stall is critical, such as live sports or video conferencing, even if the quality is not the best.
+
+From this perspective, ABR choice in real systems depends more on priorities for various use cases, whether quality, smoothness, or stability is more important.
+
+\subsection*{Impact of Different Emulators}
+
+One of the most important results from our work is understanding how the emulator affects ABR performance. In our testing environment, running the same 5G traces on Mahimahi and CellReplay displays visible differences, especially in delay-sensitive metrics like buffer occupancy and rebuffer time. 
+
+This happens due to Mahimahi's fixed delay feature and burst-based traffic model, which makes RTT values consistently higher compared to CellReplay. CellReplay models realistic wireless behavior, including more accurate and detailed delay reproduction. As a result, algorithms that depend more on feedback to adapt behave differently. They stall more often in Mahimahi, where feedback is delayed more, and in CellReplay, they can react quicker.
+
+For system designers, this means that emulator choice during testing can affect which ABR algorithm performs better. If a system is evaluated only in Mahimahi, it might overestimate or underestimate how responsive an ABR algorithm is. Choosing a more advanced emulator like CellReplay and testing on realistic networks can give slightly more accurate results on how algorithms would behave during deployment.
+
+\subsection*{Adaptation to Trace Conditions}
+
+Another insight from our tests is how different trace types like driving, stationary, and weak affect performance. In real-world mobile usage, networks are unstable and change quickly. Our results display how ABR algorithms can struggle even if they perform very well in some conditions, when RTT spikes, especially in driving or weak conditions. Figures 5 and 6 show how RTT changes over time. CellReplay keeps a lower baseline compared to Mahimahi, but it still has spikes in mobile scenarios. Mahimahi, due to its design, has a higher baseline, which makes it even harder for ABR algorithms to adapt.
+
+ABR algorithms like TTP maintain a consistent performance in various conditions. Other algorithms, such as Gelato, struggle more under driving traces due to their reliance on fast feedback. This shows that experimenting only on stable and good traces can give a false evaluation of how good an ABR algorithm is. Real-world deployments should consider that conditions will change all the time, and algorithms must be tested under various scenarios.
+
+\subsection*{Final Remarks}
+
+Overall, our work shows that ABR evaluation must be done with careful consideration. An algorithm that looks good in one setup might perform worse in another due to emulator design or different network traces. To choose the right ABR for real-world use, developers need to:
+
+\begin{itemize}
+    \item Match the ABR strategy with their service goals (e.g., quality vs. smoothness),
+    \item Use realistic emulators like CellReplay or real traces to avoid misleading results.
+    \item Test under both stable and unstable traces to ensure robustness.
+\end{itemize}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:

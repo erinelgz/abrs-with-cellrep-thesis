@@ -1,0 +1,9 @@
+\subsection{Abstract}
+
+To setup a testbed for our ABR evaluation, we used open-source platforms like Stanford's Puffer, Mahimahi, and CellReplay. To be able to run this testbed, we had to make some modifications to their source codes in our Ubuntu 24.04 environment. To build Puffer, we had to resolve \texttt{uint64} errors in several files, which can be easily fixed by adding \texttt{<cstdint>} library on top of the files that produces errors during \texttt{make} process. Other than that, in \texttt{opus\_encoder.cc} file, \texttt{av\_register\_all()} call is deprecated, therefore we commented it out. This setup would allow Puffer to be built, and operate. Similarly, we also had to resolve \texttt{uint64} errors in Mahimahi and CellReplay. To install some of the dependencies that is mentioned in Puffer's documentation, such as Django, we set up virtual environment, and use it when running the web servers. To run Pensieve in Puffer's repository, it requires Python 2.7 and TensorFlow, which may not be supported in current systems. We solved this issue by using a Conda environment. Lastly, CellReplay produced iptables error, which can be solved by switching to legacy iptables, and modifying CellReplay's configurations to use that version.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:

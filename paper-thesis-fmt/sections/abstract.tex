@@ -1,0 +1,8 @@
+%
+Adaptive bitrate (ABR) algorithms play a vital role in video streaming by consistently changing video quality under varying and unpredictable network conditions. They dynamically adjust quality to maintain smooth playback in various environments, such as fluctuating networks, balancing visual quality against buffering. However, evaluating their performance and choosing a suitable algorithm is challenging due to variations in test environments and network traces. This thesis investigates the performance and behavior of six ABR algorithms; BOLA, Linear BBA, TTP, Gelato, Pensieve, and MPC using the Puffer live video streaming platform. To maintain a fair environment for all ABR algorithms, we stream pre-recorded videos in an emulated environment using Mahimahi and CellReplay, two network emulators designed for evaluation of internet systems. We run various traces with different conditions, bandwidths, and signal strengths to reveal clear trade-offs for ABR algorithms. We collect QoE (quality of experience) and network metrics for each ABR algorithm in a fair environment. A key contribution of this thesis is a cross-emulator comparison, where we run the same traces in two different emulators, Mahimahi and CellReplay, to examine what impacts emulator choice has on performance of each ABR algorithm. Our analysis shows that ABR rankings are sensitive to both emulator choices and network conditions. We also compare our results with prior work to evaluate in what way our work matches to theirs. This work provides a practical and extensible framework for ABR evaluation, contributing new insights into the stability of ABR performance across testbeds and trace types.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:

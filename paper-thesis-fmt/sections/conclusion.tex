@@ -1,0 +1,8 @@
+\section{Conclusion}\label{s:conclusion}
+
+In this thesis, we evaluated the performance of six ABR algorithms under two emulated environments, Mahimahi and CellReplay. We compared several metrics such as SSIM, rebuffer time, buffer occupancy, delivery rate, and RTT to understand how rankings change across different emulators. While SSIM and rebuffer rankings remained mostly consistent, we observed noticeable shifts in other metrics like buffer time and delivery rate. These shifts indicate that the emulator design has a direct impact on how ABR algorithms behave and rank. In particular, Mahimahi's inflated delays compress buffer levels and smooth out variations, while CellReplay's realistic conditions highlight differences in algorithm behavior, especially under 5G. Algorithms like TTP and Linear BBA showed more stable behavior, whereas learning-based methods such as Pensieve were more sensitive and required careful tuning. Overall, our results show that emulator fidelity and trace diversity are critical when evaluating ABR algorithms. Although this section addresses our research question, this study has several limitations. We evaluated a single video clip for 10 minutes, which may not capture the full complexity of ABR behavior. Additionally, we used real network traces, but the replayed conditions are deterministic and may not fully represent live cellular environments. Future work could extend this comparison using more varied network traces, streaming higher-quality content for longer periods, include user sensitivity metrics, or evaluate newer codec-aware ABRs under realistic conditions.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:
