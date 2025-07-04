@@ -15,11 +15,11 @@ We mentioned about user workflow to conduct experiments in overview in Section 3
 
 \paraib{Evaluation and Expected Result}
 %
-When comparing emulators, we did expect CellReplay to perform better due to its advanced design compared to Mahimahi. We indeed observed the RTT and delivery rate changes between both emulators, but we were also expecting SSIM and rebuffer time rankings to also shift slightly. Instead, they remained constant, with only slight deviations of both metric values. When we processed graphs for SSIM index and rebuffer time, Mahimahi and CellReplay's patterns on each ABR were almost identical when same traces were used.
+When comparing emulators, we did expect CellReplay to perform better due to its advanced design compared to Mahimahi. We indeed observed the RTT and delivery rate changes between both emulators, but we were also expecting SSIM and BufRatio rankings to also shift slightly. Instead, they remained constant, with only slight deviations of both metric values. When we processed graphs for SSIM index and BufRatio, Mahimahi and CellReplay's patterns on each ABR were almost identical when same traces were used.
 
 \paraib{Experiment Customization}
 %
-For our ABR configurations, we used \texttt{cubic} congestion control algorithm, which is default in Ubuntu, but if desired, users can also use \texttt{bbr}, by modifyin settings.yml file. Also, we used recommended configuration for each ABR, but for custom experiments, these configurations can be modified.
+For our ABR configurations, we used \texttt{cubic} congestion control algorithm, which is default in Ubuntu, but if desired, users can also use \texttt{bbr}, by modifying settings.yml file. Also, we used recommended configuration for each ABR, but for custom experiments, these configurations can be modified.
 
 
 %%% Local Variables:
