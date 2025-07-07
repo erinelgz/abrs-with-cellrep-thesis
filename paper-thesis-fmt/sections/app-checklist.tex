@@ -14,15 +14,11 @@ We obtained our data set from Puffer's InfluxDB database. During each test run, 
 
 \chk{Run-time environment}:
 %
-We used a virtual machine with Ubuntu 24.04. Our artifacts are supported in this environment, but due to version-specific requirements, we had to modify some of the source files mentioned in~\ref{s:artifact_abstract}. We used root privileges where appropriate, such as installing specific libraries and tcpdump.
+We used a virtual machine with Ubuntu 24.04. Our artifacts are supported in this environment, but due to version-specific requirements, we had to modify some of the source files mentioned in~\ref{s:artifact_abstract}.
 
 \chk{Run-time state}:
 %
 Experimentation in Puffer is sensitive to background network traffic. However, we conducted all our tests inside an emulated network namespace on a virtual machine. In this way, our testbed is not affected by the background traffic from the host system.
-
-\chk{Execution and experimentation}:
-%
-We execute our tests in either a Mahimahi shell or a CellReplay shell. First, we run Puffer's servers in separate terminals, and in the third terminal, we start an emulated namespace to run our Puppeteer script. The script connects to the servers and runs for 10 minutes. This provides automation for each test run. In the fourth terminal, we start tcpdump and capture the network traffic right before running the script. To further automate this process, TCP packet capture can be added within the script, as well as extracting InfluxDB metrics.
 
 \chk{Metrics and Output}:
 %
