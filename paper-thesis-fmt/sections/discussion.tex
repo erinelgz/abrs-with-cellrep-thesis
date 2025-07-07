@@ -4,7 +4,9 @@ The results of our evaluation show how each ABR algorithm behaves in different e
 
 \subsection*{ABR Trade-offs and Real World Usage}
 
-All algorithms have their own strategies, which lead to different advantages and disadvantages depending on varying network conditions. For example, Gelato is ideal for platforms that aim to maximize video quality, even if it means occasional stalling. It consistently performed as the overall best ABR algorithm that gave the highest SSIM scores, especially in 5G scenarios. However, Gelato experiences higher Bufratio in some conditions, which makes it more suitable for platforms that stream movies, where users may tolerate occasional pauses.
+All algorithms have their own strategies, which lead to different advantages and disadvantages depending on varying network conditions.
+
+Gelato consistently achieved the highest SSIM scores, especially in 5G scenarios. However, it experiences BufRatio higher than other algorithms in some conditions, which makes it more suitable for platforms that stream movies, where users may tolerate occasional pauses.
 
 Pensieve performed better in terms of BufRatio on lower bandwidth 4G networks, but sacrificed some quality. On the other hand, in higher bandwidth networks such as 5G, it stalls more than other ABR algorithms. This could be a sign that Pensieve overshoots or cannot react well to faster link changes, making it less ideal for modern mobile networks unless it is tuned appropriately.
 
@@ -18,21 +20,19 @@ In summary, choosing an ABR model in real systems is more dependent on the prior
 
 \subsection*{Impact of Different Emulators}
 
-One of the most important results of our work is understanding how the emulator affects ABR performance. In our testing environment, running the same 5G traces on Mahimahi and CellReplay displays visible differences, especially in delay-sensitive metrics such as BufRatio, RTT, and delivery rate. 
-
-This happens because of Mahimahi's fixed delay feature and burst-based traffic model, which make RTT values consistently higher. CellReplay models realistic wireless behavior, including more accurate and detailed delay reproduction. As a result, algorithms that depend more on feedback to adapt behave differently. When feedback is delayed, algorithms respond slower, limiting their performance.
+One of the most important results of our work is understanding how the emulator affects ABR performance. In our testing environment, running the same 5G traces on Mahimahi and CellReplay displays visible differences, especially in delay-sensitive metrics such as BufRatio, RTT, and delivery rate. This happens because of Mahimahi's fixed delay feature and burst-based traffic model. CellReplay models realistic wireless behavior, including more accurate and detailed delay reproduction. As a result, algorithms that depend more on feedback to adapt behave differently. When feedback is delayed, algorithms respond slower, limiting their performance.
 
 For system designers, this means that the choice of emulator when comparing ABR algorithms can slightly affect the accuracy of the evaluation in some aspects. Choosing a more advanced emulator like CellReplay and testing on realistic networks can give slightly more accurate results on how algorithms would behave during deployment.
 
 \subsection*{Adaptation to Trace Conditions}
 
-Another insight from our tests is how different trace types like driving, stationary, and weak affect performance. In real-world mobile usage, networks are unstable and change quickly. Our results show how ABR algorithms can struggle even if they perform very well in some conditions when the RTT spikes, especially in driving or weak conditions. Figures 5 and 6 show how the RTT changes over time. CellReplay maintains a lower baseline compared to Mahimahi, but still has spikes in mobile scenarios. Mahimahi, due to its design, has a higher baseline, making it even harder for ABR algorithms to adapt.
+Another insight from our tests is how different trace types like driving, stationary, and weak affect performance. In real-world mobile usage, networks are unstable and change quickly. Our results show how ABR algorithms can struggle when the RTT spikes, even if they perform very well in some conditions. CellReplay maintains a lower baseline compared to Mahimahi, but still has RTT spikes in mobile scenarios. Mahimahi has a higher baseline, making it even harder for ABR algorithms to adapt.
 
 ABR algorithms like TTP maintain consistent performance under various conditions. Other algorithms, such as Gelato, struggle more under driving traces due to their reliance on fast feedback. This shows that experimenting only with stable and good traces can give a false evaluation of how good an ABR algorithm is. Real-world deployments should consider that conditions will change all the time and algorithms must be tested in various scenarios.
 
 \subsection*{Limitations and Future Work}
 
-Although we evaluate ABR algorithms under various conditions, there are several limitations due to time constraints. Our experiments rely on a single video with a duration of 10 minutes. This work could be extended by evaluating higher quality content for longer to introduce stress testing for algorithms. We conducted our experiments with multiple traces that represent modern cellular networks, but we can extend this by testing WiFi or satellite-based networks that could reveal different adaptation strategies. Our analysis relies on mean metric values across all traces, which reflects the overall performance of each algorithm. future work can extend this by analyzing different signal strengths separately and in more detail. Furthermore, learning-based algorithms like Pensieve are not tuned with precision to adapt cellular networks. These algorithms can be re-evaluated after fine-tuning to reveal their true performances. Lastly, while CellReplay offers more realistic emulation, real-world deployments still have additional complexity, which remains outside of our scope.
+Although we evaluate ABR algorithms under various conditions, there are several limitations due to time constraints. Our experiments rely on a single video with a duration of 10 minutes. This work could be extended by evaluating higher quality content for longer to introduce stress testing for algorithms. We conducted our experiments with multiple traces that represent modern cellular networks, but we can extend this by testing WiFi or satellite-based networks that could reveal different adaptation strategies. Our analysis relies on mean metric values across all traces, which reflects the overall performance of each algorithm. Future work can extend this by analyzing different signal strengths separately and in more detail. Furthermore, learning-based algorithms like Pensieve are not tuned with precision to adapt cellular networks. These algorithms can be re-evaluated after fine-tuning to reveal their true performances. Lastly, while CellReplay offers more realistic emulation, real-world deployments still have additional complexity, which remains outside of our scope.
 
 %%% Local Variables:
 %%% mode: latex
