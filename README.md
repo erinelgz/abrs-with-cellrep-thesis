@@ -1,30 +1,13 @@
-# Abstract
+# About
 
-Adaptive bitrate (ABR) algorithms play a vital role in video stream-
-ing by adjusting video quality under varying and unpredictable net-
-work conditions. They dynamically adjust quality to maintain stable
-playback in various environments, such as fluctuating network con-
-ditions. However, evaluating their performance and choosing a suit-
-able algorithm is challenging due to variations in test environments
-and network traces. This thesis investigates the performance and
-behavior of six ABR algorithms; BOLA, Linear BBA, TTP, Gelato,
-Pensieve, and MPC using the Puffer live video streaming platform.
-To maintain a fair environment for all ABR algorithms, we stream
-pre-recorded videos in an emulated environment using Mahimahi
-and CellReplay, two network emulators designed for evaluation of
-internet systems. We run various traces with different conditions,
-bandwidths, and signal strengths to reveal clear trade-offs for ABR
-algorithms. We collect QoE (quality of experience) and network
-performance-related metrics for each ABR algorithm. A key contri-
-bution of this thesis is a cross-emulator comparison. CellReplay is
-a recent, award-winning tool that replaced the state-of-the-art in
-cellular network record-and-replay. This thesis investigates how
-the performance and ranking of ABR algorithms change when Cell-
-Replay is used. To address this, we run the same traces in both
-emulators and analyze their impact on the performance of each
-ABR algorithm. Our analysis shows that ABR rankings are sensitive
-to both emulator choices and network conditions. We also compare
-our results with previous work to evaluate in what way our work
-matches to theirs. This work provides a practical and extensible
-framework for ABR evaluation, contributing new insights into the
-stability of ABR performance across testbeds and trace types.
+LaTeX template for VUSec bachelor’s and master’s thesis reports.
+
+
+## Editing
+
+The main LaTeX file is `thesis.tex` and the contents of the thesis are neatly arranged in separate LaTeX files under `sections/`. Start by providing appropriate values for the cover page of the thesis in `thesis.tex` and populate the contents of the appropriate sections. Please define your custom aliases and acronyms in `aliases.sty`. Lastly, remove unwanted sections and references. 
+
+
+## Compiling
+
+The `Makefile` uses `latexmk` to simplify the build process. Simple type `make` to build the PDF, or use `make watch` to automatically build the PDF whenever the content changes.

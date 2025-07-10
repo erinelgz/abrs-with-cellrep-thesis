@@ -26,11 +26,8 @@ In this thesis, we evaluate the performance of ABR algorithms using some key met
 
     \item \textbf{BufRatio:} We often use "stalling" when referring to this metric. It represents the proportion of total playback time that the video player spent stalling. A lower BufRatio indicates a playback with fewer interruptions.
     \[
-    \text{BufRatio} = \frac{R}{R + P} \times 100
+    \text{BufRatio} = \frac{\text{Rebuffer Time}}{\text{Total Playback Duration}} \times 100
     \]
-    
-    \noindent
-    where \(R\) is the total rebuffer time (in seconds) and \(P\) is the total playback time (in seconds).
 
     \item \textbf{RTT (Round-Trip Time):} RTT is the average delay in milliseconds. It measures how long it takes for a signal to reach the server and come back. Higher RTT means that the feedback is delayed and the decisions of the ABR algorithms are slowed down, causing delayed responses.
 
